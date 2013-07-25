@@ -1,206 +1,133 @@
-A ruleset for Mental Magic
+Mental Magic for Cockatrice
+
+MM.C.1  This is a ruleset for Mental Magic that makes full use of
+        Cockatrice's token-making features.
+
+  MM.C.1a  At the token creation dialog, unchecking the checkbox labeled
+           "Destroy token when it leaves the table" causes that token to
+           persist in all zones — i.e. to behave like a card.
+
+  MM.C.1b  Giving a token the name of an existing Magic card generates that
+           token with the corresponding card image and rules text.
+
+MM.C.2  I recommend that each player uses the following deck:
+        https://saltybookie.neocities.org/MM.txt
+
+MM.C.3  All cards start the game unnamed. In most cases, cards in hidden
+        zones (i.e. libraries, hands) will be unnamed, and cards in public
+        zones (i.e. stack, battlefield, graveyards, exiles) will be named.
+
+  MM.C.3a  Naming a card requires replacing it with a Magic card with the
+           same mana cost. Create it as a token — see MM.C.1. Put the old
+           card in the exile pile, but consider it no longer to exist.
+
+  MM.C.3b  A previously chosen name can't be chosen again that game.
+
+  MM.C.3c  You may name an unnamed card you own if after doing so:
+            * it would enter face-up onto the stack or the battlefield;
+            * it would be spliced onto a spell you're casting;
+            * an ability it has would go onto the stack, or a delayed
+              triggered ability it has would go onto the stack later;
+            * or it would be exiled by an effect that couldn't exile it if
+              it stayed unnamed, and that would continue to reference it.
+           For example, you name a card when Isochron Scepter exiles it.
+           On the other hand, you don't name a card when Elkin Bottle
+           exiles it; you name it if and when you play it. And you can't
+           name Transguild Courier to pay for Force of Will, but you can
+           use an unnamed card that's already blue.
+
+  MM.C.3d  You can cast either half of a split card you name.
+
+  MM.C.3e  Some effects exile cards regardless of characteristics, but only
+           continue to reference the cards matching some description. For
+           the purposes of MM.C.3, consider such effects to reference the
+           card(s) regardless of characteristics. So you don't name a card
+           when Nivix, Aerie of the Firemind exiles it, but you can name
+           it as an instant or sorcery card when you want to cast it.
+
+  MM.C.3f  You may name an unnamed card an opponent owns if an effect you
+           control would put that card face-up onto the stack or the
+           battlefield under your control, possibly by letting you cast it.
+           This rule trumps any rules letting the opponent choose the name.
+
+  MM.C.3g  A named card in a hidden zone becomes unnamed. (Keep the card as
+           is; no need to rummage through the exile pile for the original.)
+
+  MM.C.3h  Exceptionally, named basic land cards (see MM.C.5 and MM.C.6)
+           stay named for the rest of that game, even in hidden zones.
+
+  MM.C.3i  Some cards have abilities that trigger or are activated from the
+           hand, with which the card stays in hand and is temporarily
+           revealed — e.g. Miracle, Forecast. In those cases, the card
+           stays named as long as it's revealed.
+
+  MM.C.3j  An unnamed card in a graveyard ceases to exist as a state-based
+           action. An unnamed card in exile that's no longer referenced by
+           any effects ceases to exist as a state-based action. So cards in
+           exile that are still significant can be kept on the table, and
+           the exile pile will instead be for cards that ceased to exist.
+
+  MM.C.3k  Unnamed cards have no characteristics other than color and mana
+           cost. In addition, they do not match any description involving
+           card type. For example, neither Ostracize nor Distress can
+           discard an unnamed card unless the unnamed card's owner chooses
+           to name it as something relevant.
+
+MM.C.4  Certain mana costs have equivalence relations. The transitive
+        property does NOT apply. (A=B and B=C don't necessarily imply A=C.)
+
+  MM.C.4a  A card costing {0} (e.g. Ornithopter) may become a card with no
+           mana cost (e.g. lands, Evermind), and vice versa.
+
+  MM.C.4b  A multicolor card costing at least one non-hybrid colored mana
+           may become any multicolor card costing at least one non-hybrid
+           colored mana that has the same converted mana cost.
+
+  MM.C.4c  A card may become any card costing hybrid mana if their mana
+           costs would match with some or all of the hybrid mana symbols
+           treated as one of their halves, and vice versa. For example,
+           a card costing {R}{R}{R}, {2}{R}{R}, {4}{R}, or {6} can become
+           Flame Javelin, without restricting how you actually pay if you
+           cast it, and if the Flame Javelin somehow ends up back in your
+           hand, then it can become any card costing {R}{R}{R}, {2}{R}{R},
+           {4}{R}, or {6}.
+
+  MM.C.4d  For the purposes of matching mana symbols, treat phyrexian mana
+           symbols as non-phyrexian mana symbols of the same color.
+           Unlike the other equivalence relations, this one IS transitive.
+
+MM.C.5  Once per turn, the active player may name and play an unnamed card
+        as Utopia:
+
+        Utopia
+        Basic Land — Utopia
+        (Utopia is an additional land type that exists in Mental Magic
+        games; Utopia is not a basic land type.)
+        {T}: Add one mana of any color to your mana pool.
 
-last updated 2013-7-15
+  MM.C.5a  Doing so counts as playing a land, but effects that allow you to
+           play additional land in a turn don't let you name Utopia again.
 
-Disclaimer: These rules are tailored to my particular card pool.
+  MM.C.5b  For convenience, use shift-drag to play the card face-down.
+           There's no need to replace the card with a Utopia token unless
+           it somehow leaves the battlefield, in which case do create a
+           Utopia token (uncheck "Destroy token when it leaves the table")
+           and put the old card in the exile pile.
 
-"The wizard who reads a thousand books is powerful.  The wizard who memorizes a thousand books is insane."
-— Battle of Wits
+MM.C.6  When searching a library, you may also find Basic Land cards (not
+        Utopia). Create them as tokens (uncheck "Destroy token...").
 
-"One of the requisites for becoming a powerful wizard is an excellent memory.  The key to a puzzle is often something you read twenty years ago in an old scroll, or a peculiar ring you saw on the finger of a man you met only once."
-— HPMOR
+MM.C.7  Bans
 
---
+  MM.C.7a  vivafringe recommends banning cards restricted in Vintage;
+           ntillerman recommends banning cards banned in Legacy.
 
-MM.1. A Mental Magic game is a game with at least one Mental Magic player.
+  MM.C.7b  Cards that ask you to reveal cards from a library until a card
+           meeting certain conditions is revealed (e.g. Tainted Pact, Mind
+           Funeral) are banned.
 
-    Example: A Mental Magic game can have non-Mental-Magic players, but you'll probably want to handicap the game in some way.
+  MM.C.7c  Dark Depths is banned.
 
-MM.2. Each Mental Magic player uses a separate library of 40 random cards from my card pool.
-
-MM.3. A Mental Magic card isn't treated as-is, but can be declared as a Magic card with the same mana cost.
-
-MM.3a A Mental Magic card's declared identity remains in effect as long as the card is in a public zone, not face down, and one of the following is true —
-> The card is on the stack or the battlefield;
-> an ability from the card is on the stack;
-> a static ability from the card applies from the card's current zone, unless the effect only affects the card itself or has an unmet "as long as" condition;
-> or the card continues to be referenced by a spell or ability on the stack, by a delayed triggered ability, or in association with a spell or ability that targeted or exiled the card, unless the card's characteristics no longer matter or only continue to matter due to targeting restrictions. Furthermore, merely to check the existence, non-existence, or quantity of objects matching a description, to move all objects matching a description to a zone other than the stack or the battlefield, or to check the existence, non-existence, or quantity of objects moved this way, doesn't cause characteristics of cards among those objects to matter for the purposes of this rule;
-> or an Aura is attached to the card.
-
-    Example: Flashback is a static ability that applies in the graveyard, but only affects the card itself. So if you cast Firebolt from your hand, you won't be able to flash it back (as Firebolt), because it reverts from its identity when it enters your graveyard.
-
-    Example: Crusader of Odric's ability applies in all zones, but only affects the card itself.
-
-    Example: If Wonder is in your graveyard but you don't control an Island, then it has an unmet "as long as" condition.
-
-    Example: Fling references last known information, as opposed to referencing the sacrificed card.
-
-    Example: If a card is exiled by Flicker, Flickerwisp, or Oblivion Ring, its characteristics still matter, because it's possible for the card to return to the battlefield without reverting from its identity. On the other hand, if a card is exiled by Angel of Serenity, its characteristics no longer matter.
-
-    Example: Extraplanar Lens cares whether other cards match a description referencing the imprinted card, as opposed to caring whether the imprinted card matches a description. As of Dragon's Maze, AFAICT the only Magic card with Imprint that doesn't function as intended under this ruleset's wording is Death-Mask Duplicant. (Coincidentally, my card pool doesn't have any cards costing {7}.)
-
-    Example: Crypt Incursion usually doesn't cause any other cards' characteristics to matter for the purposes of this rule, thanks to the "exceptions to mass referencing".
-
-    Examples involving targeting restrictions are listed under rule MM.3b.
-
-MM.3b An identity may be declared for a Mental Magic card if the card would satisfy the conditions in rule MM.3a as a result of doing so.
-
-    Example: You may declare a card in your graveyard as Firebolt in order to flash it back, but only immediately then; you can't declare it as Firebolt and choose not to flash it back immediately. Ditto for an activated ability like Scavenge.
-
-    Example: You may declare a card in your graveyard as Divination in order to target it with Snapcaster Mage, even if you don't flash it back immediately or at all. But you can't declare a card in your graveyard as Divination in order to target it with Archaeomancer, because between when you declare it and when it reverts from its identity by returning to your hand, its characteristics wouldn't matter except for Archaeomancer's targeting restrictions.
-
-    Example: Aphetto Dredging usually doesn't cause identities to be declared for its targets, so it goes by its targets' printed creature types (unless you declare a Golgari Brownscale!).
-
-    Example: You can't declare a card as Transguild Courier in order to pay for Force of Will, because the card wouldn't "continue" to be referenced.
-
-    Example: For the purposes of rule MM.3a, an ability like Haunted Fengraf's isn't referencing any cards while it's on the stack, so you can't declare a card in your graveyard as Golgari Brownscale until it's been chosen during resolution.
-
-MM.3c An identity must be declared for a Mental Magic card if the card would satisfy the conditions in rule MM.3a as a result of not doing so. If the card wouldn't otherwise satisfy the conditions except that its characteristics would matter in some way the players don't care about, the players may agree to take the shortcut of playing as though its characteristics wouldn't matter (so an identity wouldn't need to be declared).
-
-    Example: A creature card entering the battlefield due to Exhume must be declared as a creature card.
-
-MM.3d The choice of identity to declare is made by the card's owner, except if the card could be put onto the stack or the battlefield under another player's control by an effect that player controls, including after a series of triggers and/or choices as long as the card is continuously referenced in association with that effect until that effect does so or becomes unable to do so, in which case that player makes the choice.
-
-MM.3e A Magic card that's already been chosen as a declared identity in a Mental Magic game can't be chosen again.
-
-MM.3f For the purposes of rule MM.3, Magic cards with no mana cost have the same mana cost as Magic cards with mana cost {0}.
-
-MM.3g A Mental Magic card declared as a split card can be cast as either half.
-
-MM.3h For the purposes of rule MM.3, hybrid mana costs match each possible combination of hybrid symbol halves.
-
-    Example: A Mental Magic card costing {R}{R}{R}, {2}{R}{R}, {4}{R}, or {6} can be declared as Flame Javelin, without restricting how you actually pay if you cast it.
-
-MM.3i For the purposes of rule MM.3, treat phyrexian mana symbols as non-phyrexian mana symbols of the same color.
-
-MM.4. Once per turn, the active player may play a land by playing a Mental Magic card from his or her hand face down as Utopia:
-> Utopia
-> Basic Land — Utopia
-> {T}: Add one mana of any color to your mana pool.
-
-MM.4a Doing so counts as playing a land, but effects that allow a player to play additional land in a turn don't allow additional Utopia to be played.
-
-MM.4b Once it's been played, treat Utopia as though it were a declared identity, except that it's always face down on the battlefield.
-
-MM.4c Because any Mental Magic card can be played as Utopia, as Utopia leaves the battlefield, the face down card doesn't need to be revealed.
-
-MM.4d Utopia is an additional land type that exists in Mental Magic games. (Utopia is not a basic land type.)
-
-MM.4e Utopia isn't the name of a Magic card (just like Marit Lage isn't) and a Mental Magic card can't be declared as Utopia.
-
-MM.5. Any Mental Magic card can be cast face down as though it had Morph.
-
-MM.5a Because any Mental Magic card can be cast face down, if a Mental Magic card leaves the stack or the battlefield as a face down creature, it doesn't need to be revealed (unless it was face down due to Illusionary Mask).
-
-MM.5b As an exception to rule MM.3a, if a permanent is turned face down by an ability like Ixidron's, its declared identity is retained as though it weren't face down.
-
-MM.6. A Mental Magic card declared as a double-faced card can transform (unlike with copy effects).
-
-MM.7. Players can't search Mental Magic libraries.
-
-MM.8. Players can't use Dredge (the keyword ability) with Mental Magic cards.
-
-MM.9. As long as a Mental Magic card with mana cost {0} has no identity declared, it can be discarded and targeted as though it were a land card as well as a nonland card.
-
-MM.10. This ruleset's wording requires an exception for Past in Flames to function as intended. As long as a Mental Magic card is declared as Past in Flames, treat it as though its text were:
-> Until end of turn, each instant and sorcery card in your graveyard has flashback as long as it's been in your graveyard since Past in Flames started resolving. The flashback cost is equal to its mana cost.
-> Flashback {4}{R}
-
---
-
-Banned Cards
-
-For the sake of variants, I've included cards with mana costs not in my card pool.
-
-Ante & Dexterity:
-> Amulet of Quoz
-> Bronze Tablet
-> Chaos Orb
-> Contract from Below
-> Darkpact
-> Demonic Attorney
-> Falling Star
-> Jeweled Bird
-> Rebirth
-> Tempest Efreet
-> Timmerian Fiends
-
-"Grind", Mass Deck-Stacking, & "Secretary" Minigame (https://en.wikipedia.org/wiki/Secretary_problem):
-> Abundance
-> Balustrade Spy
-> Bone Harvest
-> Consuming Aberration
-> Destroy the Evidence
-> Footbottom Feast
-> Goblin Charbelcher
-> Gravepurge
-> Mind Funeral
-> Mind Grind
-> Mirko Vosk, Mind Drinker
-> Possibility Storm
-> Recross the Paths
-> Reweave
-> Riptide Shapeshifter
-> Spellshift
-> Trepanation Blade
-> Undercity Informer
-
-Mass Reanimation (too swingy and takes forever to resolve):
-> All Hallow's Eve
-> Angel of Glory's Rise
-> Balthor the Defiled
-> Death or Glory
-> Faith's Reward
-> Grimoire of the Dead
-> Liliana Vess
-> Living Death
-> Living End
-> Open the Vaults
-> Patriarch's Bidding
-> Pyrrhic Revival
-> Replenish
-> Retether
-> Rise of the Dark Realms
-> Second Sunrise
-> Twilight's Call
-> Zombie Apocalypse
-
-Too Powerful:
-> Ancestral Recall
-> Balance
-> Black Lotus
-> Brain Freeze
-> Chrome Mox
-> Dark Depths
-> Lead the Stampede
-> Mana Crypt
-> Mox Diamond
-> Mox Emerald
-> Mox Jet
-> Mox Pearl
-> Mox Ruby
-> Mox Sapphire
-> Sol Ring
-> Time Vault
-> Time Walk
-
-I've omitted many, many cards until they've been demonstrated to deserve their slot.  After all, this isn't constructed.  And the demonstration might be a fun exercise.
-
-"Brain Freeze and Dark Depths, really?"
-
-I've learned from experience that Brain Freeze ends games out of nowhere without much chance to deal with it.  But I've only theorized that Dark Depths + Vampire Hexmage is the same.
-
---
-
-Changelog
-
-2013-5-9:   Created.
-
-2013-5-10:  Added rules for split cards, hybrid mana, phyrexian mana, and discarding and targeting land cards.
-
-2013-5-29:  Added "'Secretary' Minigame (https://en.wikipedia.org/wiki/Secretary_problem)" to bans.
-
-2013-7-14:  Added delayed mass reanimation (All Hallow's Eve, Grimoire of the Dead, Liliana Vess, Living End) to bans.
-
-2013-7-15:  Reworded and expanded rule MM.3a's exceptions to mass referencing ("Furthermore..."); added "or an Aura is attached to the card".
+  MM.C.7d  Illusionary Mask and cards with Morph are banned. We might unban
+           them in the future when we have satisfactory rules for them.
 
