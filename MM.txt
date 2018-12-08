@@ -1,133 +1,187 @@
-Mental Magic for Cockatrice
+Async Mental Magic v20181207a
 
-MM.C.1  This is a ruleset for Mental Magic that makes full use of
-        Cockatrice's token-making features.
+1   For the sake of play-by-post, cards have IDs that are public
+    information, even when the cards are in players' hands. IDs are like
+    a100, where 'a' is the game ID, '1' is the player who owns the card,
+    and '00' identifies the individual card. Bot commands are as follows:
 
-  MM.C.1a  At the token creation dialog, unchecking the checkbox labeled
-           "Destroy token when it leaves the table" causes that token to
-           persist in all zones — i.e. to behave like a card.
+! 100 101 102 103 104 105 106 #comment goes here
+    > PEEP one or more cards, i.e. make them visible to your team
 
-  MM.C.1b  Giving a token the name of an existing Magic card generates that
-           token with the corresponding card image and rules text.
+!! 202 203 204 #Gitaxian Probe
+    > FLIP one or more cards, i.e. reveal publicly
 
-MM.C.2  I recommend that each player uses the following deck:
-        https://saltybookie.neocities.org/MM.txt
+!n 105 Gitaxian Probe
+    > NAME a card
 
-MM.C.3  All cards start the game unnamed. In most cases, cards in hidden
-        zones (i.e. libraries, hands) will be unnamed, and cards in public
-        zones (i.e. stack, battlefield, graveyards, exiles) will be named.
+!u 106
+    > Shortcut equivalent to !n 106 Utopia
 
-  MM.C.3a  Naming a card requires replacing it with a Magic card with the
-           same mana cost. Create it as a token — see MM.C.1. Put the old
-           card in the exile pile, but consider it no longer to exist.
+!dibs
+    > Call dibs on controlling the current turn.
 
-  MM.C.3b  A previously chosen name can't be chosen again that game.
+!turnover #kill 4/4 if possible, else prioritize 1/1s
+    > End control of your turn,
+      with directions for assigning combat damage, if needed.
 
-  MM.C.3c  You may name an unnamed card you own if after doing so:
-            * it would enter face-up onto the stack or the battlefield;
-            * it would be spliced onto a spell you're casting;
-            * an ability it has would go onto the stack, or a delayed
-              triggered ability it has would go onto the stack later;
-            * or it would be exiled by an effect that couldn't exile it if
-              it stayed unnamed, and that would continue to reference it.
-           For example, you name a card when Isochron Scepter exiles it.
-           On the other hand, you don't name a card when Elkin Bottle
-           exiles it; you name it if and when you play it. And you can't
-           name Transguild Courier to pay for Force of Will, but you can
-           use an unnamed card that's already blue.
+!gameover
+    > End the current game. All cards will FLIP.
 
-  MM.C.3d  You can cast either half of a split card you name.
+2   Libraries are inexhaustible.
 
-  MM.C.3e  Some effects exile cards regardless of characteristics, but only
-           continue to reference the cards matching some description. For
-           the purposes of MM.C.3, consider such effects to reference the
-           card(s) regardless of characteristics. So you don't name a card
-           when Nivix, Aerie of the Firemind exiles it, but you can name
-           it as an instant or sorcery card when you want to cast it.
+  2a  Cards that care about the size of a library (e.g. Battle of Wits,
+      Doomsday, Traumatize, Leveler) are banned.
 
-  MM.C.3f  You may name an unnamed card an opponent owns if an effect you
-           control would put that card face-up onto the stack or the
-           battlefield under your control, possibly by letting you cast it.
-           This rule trumps any rules letting the opponent choose the name.
+  2b  Cards that ask you to reveal cards from a library until you reveal
+      one meeting a condition (e.g Tainted Pact, Mind Funeral) are banned.
 
-  MM.C.3g  A named card in a hidden zone becomes unnamed. (Keep the card as
-           is; no need to rummage through the exile pile for the original.)
+  2c  If a library would be searched, instead search its owner's sideboard.
+      Sideboards contain inexhaustible supplies of Plains, Island, Swamp,
+      Mountain, Forest, and nothing else.
 
-  MM.C.3h  Exceptionally, named basic land cards (see MM.C.5 and MM.C.6)
-           stay named for the rest of that game, even in hidden zones.
+  2d  ID'd cards in libraries cease to exist when state-based effects happen.
+      (Opt works as expected. The cards returned by Brainstorm and Time Ebb
+      are lost.)
 
-  MM.C.3i  Some cards have abilities that trigger or are activated from the
-           hand, with which the card stays in hand and is temporarily
-           revealed — e.g. Miracle, Forecast. In those cases, the card
-           stays named as long as it's revealed.
+  2e  Cards in graveyards cease to exist when state-based effects happen
+      UNLESS they're being referenced by something on the stack OR
+      a delayed triggered ability. (Kitchen Finks and Loyal Cather both
+      work as expected. But you can't cast Zombify in time for it to work.)
 
-  MM.C.3j  An unnamed card in a graveyard ceases to exist as a state-based
-           action. An unnamed card in exile that's no longer referenced by
-           any effects ceases to exist as a state-based action. So cards in
-           exile that are still significant can be kept on the table, and
-           the exile pile will instead be for cards that ceased to exist.
+  2f  Cards in exile cease to exist when state-based effects happen UNLESS
+      they're being referenced by ANYTHING, even themselves (e.g. Suspend).
 
-  MM.C.3k  Unnamed cards have no characteristics other than color and mana
-           cost. In addition, they do not match any description involving
-           card type. For example, neither Ostracize nor Distress can
-           discard an unnamed card unless the unnamed card's owner chooses
-           to name it as something relevant.
+3   Cards start unnamed, and have mana cost and color, but no other
+    characteristics.
 
-MM.C.4  Certain mana costs have equivalence relations. The transitive
-        property does NOT apply. (A=B and B=C don't necessarily imply A=C.)
+  3a  Furthermore, unnamed cards do not match any description involving
+      card type. E.g. they can't be chosen for Ostracize or Distress.
 
-  MM.C.4a  A card costing {0} (e.g. Ornithopter) may become a card with no
-           mana cost (e.g. lands, Evermind), and vice versa.
+  3b  When a card becomes named, the name lasts for the rest of the game.
 
-  MM.C.4b  A multicolor card costing at least one non-hybrid colored mana
-           may become any multicolor card costing at least one non-hybrid
-           colored mana that has the same converted mana cost.
+4   Once per turn, the active player may name and play an unnamed card as:
 
-  MM.C.4c  A card may become any card costing hybrid mana if their mana
-           costs would match with some or all of the hybrid mana symbols
-           treated as one of their halves, and vice versa. For example,
-           a card costing {R}{R}{R}, {2}{R}{R}, {4}{R}, or {6} can become
-           Flame Javelin, without restricting how you actually pay if you
-           cast it, and if the Flame Javelin somehow ends up back in your
-           hand, then it can become any card costing {R}{R}{R}, {2}{R}{R},
-           {4}{R}, or {6}.
+    Utopia
+    Basic Land — Utopia
+    (Utopia is an additional land type that exists in Mental Magic games;
+     Utopia is not a basic land type.)
+    {T}: Add one mana of any color to your mana pool.
 
-  MM.C.4d  For the purposes of matching mana symbols, treat phyrexian mana
-           symbols as non-phyrexian mana symbols of the same color.
-           Unlike the other equivalence relations, this one IS transitive.
+  4a  Doing so counts as playing a land, but effects that allow you to
+      play additional land in a turn don't let you name Utopia again.
 
-MM.C.5  Once per turn, the active player may name and play an unnamed card
-        as Utopia:
+5   While you have control, you may name an unnamed card you own if one of
+    the following conditions would be fulfilled after you do so:
+     * it would enter face-up onto the stack or the battlefield;
+     * it would be spliced onto a spell you're casting;
+     * an ability it has would go onto the stack, or a delayed triggered
+       ability it has would go onto the stack later;
+     * or it would be exiled by an effect that couldn't exile it if it
+       stayed unnamed, and which would continue to reference it.
+    For example, you name a card when Isochron Scepter exiles it.
+    On the other hand, you don't name a card when Elkin Bottle exiles it;
+    you name it if and when you play it. And you can't name Transguild
+    Courier to pay for Force of Will, but you can use an unnamed card
+    that's already blue (or a Transguild Courier that got bounced).
 
-        Utopia
-        Basic Land — Utopia
-        (Utopia is an additional land type that exists in Mental Magic
-        games; Utopia is not a basic land type.)
-        {T}: Add one mana of any color to your mana pool.
+  5a  Some effects exile cards regardless of characteristics, but only
+      continue to reference the cards matching some description. For the
+      purposes of Rule 5, consider such effects to reference the card(s)
+      regardless of characteristics. So you don't name a card when Nivix,
+      Aerie of the Firemind exiles it, but you can name it as an instant or
+      sorcery card when you want to cast it.
 
-  MM.C.5a  Doing so counts as playing a land, but effects that allow you to
-           play additional land in a turn don't let you name Utopia again.
+  5b  You may name an unnamed card an opponent owns if an effect you
+      control would put that card face-up onto the stack or the battlefield
+      under your control, possibly by letting you cast it. This rule trumps
+      any rules letting the opponent choose the name.
 
-  MM.C.5b  For convenience, use shift-drag to play the card face-down.
-           There's no need to replace the card with a Utopia token unless
-           it somehow leaves the battlefield, in which case do create a
-           Utopia token (uncheck "Destroy token when it leaves the table")
-           and put the old card in the exile pile.
+  5c  The named card must have the same mana cost. Certain mana costs have
+      equivalence relations. The transitive property does NOT apply.
+      (A=B and B=C don't necessarily imply A=C.)
 
-MM.C.6  When searching a library, you may also find Basic Land cards (not
-        Utopia). Create them as tokens (uncheck "Destroy token...").
+  5d  A card costing {0} (e.g. Ornithopter) may become a card with no mana
+      cost (e.g. lands, Evermind), and vice versa.
 
-MM.C.7  Bans
+  5e  A multicolor card costing at least one non-hybrid colored mana may
+      become any multicolor card costing at least one non-hybrid colored
+      mana that has the same converted mana cost.
 
-  MM.C.7a  vivafringe recommends banning cards restricted in Vintage;
-           ntillerman recommends banning cards banned in Legacy.
+  5f  A card may become any card costing hybrid mana if their mana costs
+      would match with some or all of the hybrid mana symbols treated as
+      one of their halves, and vice versa. For example, a card costing
+      {R}{R}{R}, {2}{R}{R}, {4}{R}, or {6} can become Flame Javelin,
+      without restricting how you actually pay if you cast it.
 
-  MM.C.7b  Cards that ask you to reveal cards from a library until a card
-           meeting certain conditions is revealed (e.g. Tainted Pact, Mind
-           Funeral) are banned.
+  5g  For the purposes of matching mana symbols, treat phyrexian
+      mana symbols as non-phyrexian mana symbols of the same color.
+      Unlike the other equivalence relations, this one IS transitive.
 
-  MM.C.7c  Dark Depths is banned.
+  5h  You can cast either half of a split card you name.
 
-  MM.C.7d  Illusionary Mask and cards with Morph are banned. We might unban
-           them in the future when we have satisfactory rules for them.
+6   A previously chosen name can't be chosen again, not even in later games.
+
+  6a  Silver-bordered cards and card mentioning ante are banned.
+
+  6b  Cards that can result in facedown spells or permanents are banned.
+      (E.g. Illusionary Mask and cards with Morph.)
+
+7   Only the active player can gain priority, and only as long as he has
+    "control of the turn".
+
+  7a  Control turns over at end of turn OR when the non-active player has a
+      decision, with more than one option.
+
+  7b  For the purposes of 7a, decisions arising from effects of cards named
+      by the non-active player don't qualify. Note that declaring blockers
+      is not an effect at all.
+
+  7c  Furthermore, opportunities to name specific cards with specific
+      abilities that create the opportunity, such as Guerrilla Tactics or
+      cards with Madness, also don't qualify.
+
+  7d  HOWEVER, opportunities to name any card matching certain
+      characteristic(s), such as from Burgeoning, do qualify as decisions,
+      even if the active player somehow knows the cost(s) of the unnamed
+      card(s) and there are no possible cards to name that match those
+      characteristics, such as lands in this example. Note also in this
+      example that it would somehow have to be a Burgeoning named by the
+      active player and controlled by the non-active player, otherwise the
+      opportunity would be disqualified by 7b. A more straightforward
+      example would be if the active player played Hunted Wumpus.
+
+  7e  Once control is turned over, the non-active player controls her
+      decisions and can name cards, but still can't gain priority.
+
+  7f  Ignore Rules 7 and 8 when a "Mindslaver" effect is active.
+
+8   As for uncontrolled decisions, their options are partitioned into the
+    following categories: NO_ACTION, SELF, OPPONENT, OTHER, and MYRIAD.
+
+  8a  NO_ACTION is any choice that would qualify as taking no action for
+      the ordinary Magic rules purposes of determining whether a player
+      would be obligated to break an infinite loop.
+
+  8b  SELF and OPPONENT are choices of one player or one or more of their
+      objects over the other(s).
+
+  8c  Anything else is OTHER, except creature types and cardnames not on a
+      card currently existing in the game and multiple-digit numbers, which
+      are MYRIAD.
+
+  8d  Uncontrolled decisions default to NO_ACTION if possible, else random
+      from non-MYRIAD options, else choose the smallest number allowed,
+      else pause the game and debate further rules.
+
+  8e  The defaults in 8d can be overridden by specifying which category or
+      categories you want which ability to random from, on a per-ability
+      basis. Your spec can't apply only to some circumstances, and you
+      can't rank the categories, only select one set to try before default.
+      Specs are assumed to be until end of game unless otherwise specified.
+
+  8f  As an exception to the above, the active player, before turning over
+      control, may specify directions in unlimited detail for ordering
+      blockers and assigning combat damage.
+
+  8g  Specifications and directions are public information.
 
