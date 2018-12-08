@@ -1,0 +1,24 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+
+    "u": {
+      "$uid": {
+        ".write": "$uid === auth.uid"
+      }
+    },
+
+    "s": { ".read": true },
+    "n": { ".read": true },
+
+    "g": {
+      "$gid": {
+        "1": { ".read": "data.parent().child('t').child(root.child('u').child(auth.uid).val()).val() == 1" },
+        "2": { ".read": "data.parent().child('t').child(root.child('u').child(auth.uid).val()).val() == 2" },
+        "3": { ".read": true },
+      }
+    }
+  }
+}
+

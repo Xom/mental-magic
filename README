@@ -1,4 +1,4 @@
-Async Mental Magic v20181207a
+Async Mental Magic v20181208a
 
 1   For the sake of play-by-post, cards have IDs that are public
     information, even when the cards are in players' hands. IDs are like
@@ -16,6 +16,9 @@ Async Mental Magic v20181207a
 
 !u 106
     > Shortcut equivalent to !n 106 Utopia
+
+!info
+    > Display whose turn it is, and who has dibs on controlling the turn.
 
 !dibs
     > Call dibs on controlling the current turn.
@@ -121,7 +124,7 @@ Async Mental Magic v20181207a
 
 6   A previously chosen name can't be chosen again, not even in later games.
 
-  6a  Silver-bordered cards and card mentioning ante are banned.
+  6a  Ante, dexterity, and silver-bordered cards are banned.
 
   6b  Cards that can result in facedown spells or permanents are banned.
       (E.g. Illusionary Mask and cards with Morph.)
