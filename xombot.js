@@ -1,3 +1,7 @@
+var README = '\nFull README at <http://mm.xom.io>';
+var BAD_COMMAND = 'Invalid command.';
+var NO_DIBS = "You can't do that because you don't have dibs on control.";
+
 var seedrandom = require('seedrandom');
 seedrandom(null, { global: true });
 
@@ -58,12 +62,10 @@ xombot.on('disconnect', function(errMsg, code) {
 });
 
 xombot.on('message', function(u, uid, cid, msg, evt) {
-  console.log(evt); // TODO remove after migrating to #paperclips
+  //console.log(evt); // TODO remove after migrating to #paperclips
   retries = 0;
   var data = evt.d;
-  if (data.channel_id !== '520947962197573644'
-    || data.content.slice(0, 1) !== '!'
-    || data.author.id == xombot.id) {
+  if (data.channel_id !== '520947962197573644' || data.content.slice(0, 1) !== '!' || data.author.bot) {
     return;
   }
   switch(data.content.slice(1, 2)) {
@@ -72,16 +74,16 @@ xombot.on('message', function(u, uid, cid, msg, evt) {
     case 'n': return;
     case 'u': return;
     case 'i': return info(data);
-    case 'd': return;
-    case 't': return;
+    case 'd': return dibs(data);
+    case 't': return turnover(data);
     case 'g': return gameover(data);
-    default: xombot.sendMessage({ to: data.channel_id, message: 'Invalid command.' });
+    default: xombot.sendMessage({ to: data.channel_id, message: BAD_COMMAND });
   }
 });
 
 function gameover(data) {
   if (!data.content.startsWith('!gameover')) {
-    xombot.sendMessage({ to: data.channel_id, message: 'Invalid command.' });
+    xombot.sendMessage({ to: data.channel_id, message: BAD_COMMAND });
     return;
   }
   gameflip(state.g);
@@ -112,20 +114,85 @@ function gameflip(gid) {
 }
 
 function announceTurn(data) {
-  getVal(fs('p'), function(p) {
-    xombot.sendMessage({
-      to: data.channel_id,
-      message: (p ? 'P2' : 'P1') + ' turn. Call dibs with `!dibs`\nFull README at <http://mm.xom.io>'
-    });
+  xombot.sendMessage({
+    to: data.channel_id,
+    message: (state.p ? 'P2' : 'P1') + ' turn. Call dibs with `!dibs`' + README
   });
 }
 
 function info(data) {
   xombot.sendMessage({
     to: data.channel_id,
-    message: 'Game `' + state.g + '`, P' + (state.p ? '2' : '1') + ' turn. '
-      + (state.d ? state.d.name + ' has dibs on control.' : 'Call dibs with `!dibs`')
-      + '\nFull README at <https://example.com/TODO_README_URL>'
+    message: 'Game `' + state.g + '`, P' + (state.p ? '2' : '1') + ' turn. ' + (state.d ? state.d.name + ' has dibs on control.' : 'Call dibs with `!dibs`') + README
+  });
+}
+
+var dd = null; // dibs destroyer XD
+function dibs(data) {
+  if (!data.content.startsWith('!dibs')) {
+    xombot.sendMessage({ to: data.channel_id, message: BAD_COMMAND });
+    return;
+  }
+  if (state.d) {
+    var ts = Date.now();
+    if (dd && ts - dd.t < 30000 && dd.u == data.author.id) {
+      fs('d').set(state.d, function() {
+        state.d = null;
+        dd = null;
+        xombot.sendMessage({
+          to: data.channel_id,
+          message: 'Dibs reset. Call dibs with `!dibs`'
+        });
+      });
+      return;
+    }
+    dd = { u: data.author.id, t: ts };
+    xombot.sendMessage({
+      to: data.channel_id,
+      message: state.d.name + ' already called dibs. To reset dibs, repeat `!dibs`'
+    });
+    return;
+  }
+  var myToken = getToken(data.author.id);
+  var f_team = fg(state.g).child('t').child(myToken);
+  getVal(f_team, function(team) {
+    if (!team) {
+      team = state.p ? 2 : 1;
+      f_team.set(team);
+      xombot.sendMessage({
+        to: data.author.id,
+        message: 'Welcome to game `' + state.g + '` P' + team + ' team. Your password for <http://mm.xom.io> is ' + myToken
+      });
+    }
+    if (team == (state.p ? 2 : 1)) {
+      state.d = { id: data.author.id, name: data.author.username };
+      fs('d').set(state.d, function() {
+        xombot.sendMessage({
+          to: data.channel_id,
+          message: (state.p ? 'P2' : 'P1') + ' turn. ' + state.d.name + ' called dibs on control.'
+        });
+      });
+    } else {
+      xombot.sendMessage({
+        to: data.channel_id,
+        message: "You can't call dibs because you're already on the other team."
+      });
+    }
+  });
+}
+
+function turnover(data) {
+  if (!data.content.startsWith('!turnover')) {
+    xombot.sendMessage({ to: data.channel_id, message: BAD_COMMAND });
+    return;
+  }
+  if (!state.d || state.d.id !== data.author.id) {
+    xombot.sendMessage({ to: data.channel_id, message: NO_DIBS });
+    return;
+  }
+  state = { g: state.g, p: !state.p };
+  f_s.set(state, function() {
+    announceTurn(data);
   });
 }
 
