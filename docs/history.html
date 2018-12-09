@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Xombot cardnames history</title>
+</head>
+<body>
+
+<div id="container"></div>
+
+<script src="https://www.gstatic.com/firebasejs/5.0.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.0.2/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.0.2/firebase-database.js"></script>
+
+<script>
+var firebaseConfig = {
+  apiKey: "AIzaSyCjcNANZBWOs_LRQHFpqv2OplwumQQFx20",
+  authDomain: "xombot-e72ae.firebaseapp.com",
+  databaseURL: "https://xombot-e72ae.firebaseio.com",
+  projectId: "xombot-e72ae"
+};
+firebase.initializeApp(firebaseConfig);
+
+var fetching = false;
+firebase.auth().onAuthStateChanged(function(auth) {
+  if (auth && !fetching) {
+    fetching = true;
+    firebase.database().ref().child('n').once('value', function(ds) {
+      var v = ds.val() || {};
+      var table = document.createElement('table');
+      var tHead = table.createTHead();
+      var row = tHead.insertRow(0);
+      row.insertCell(0).innerText = 'id';
+      row.insertCell(1).innerText = 'cardname';
+      var tBody = document.createElement('tbody');
+      table.appendChild(tBody);
+      var a = [];
+      for (var k in v) {
+        var x = v[k];
+        for (var cid in x) {
+          a.push([cid, x[cid]]);
+        }
+      }
+      a.sort(function(p, q) {
+        if (p < q) return -1;
+        if (p > q) return 1;
+        return 0;
+      });
+      var n = a.length;
+      for (var i = 0; i < n; i++) {
+        row = tBody.insertRow(-1);
+        row.insertCell(0).innerText = a[i][0];
+        row.insertCell(1).innerText = a[i][1];
+      }
+      document.getElementById('container').appendChild(table);
+    });
+  }
+});
+</script>
+
+</body>
+</html>
+
