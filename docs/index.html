@@ -17,7 +17,7 @@ Password:<input id="password" size="18" autofocus/>
 <button id="buttonRefresh" type="submit" formaction="javascript:submit();" disabled>Refresh</button>
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="history.html">Xombot cardnames history</a>
 </form>
-<div id="container"><pre>Async Mental Magic v20181208b
+<div id="container"><pre>Async Mental Magic v20181209a
 
 1   For the sake of play-by-post, cards have IDs that are public
     information, even when the cards are in players' hands. IDs are like
@@ -48,6 +48,12 @@ Password:<input id="password" size="18" autofocus/>
 
 !gameover
     > End the current game. All cards will FLIP.
+
+!r 3 #Goblin Arsonist: 1=me;2=Pyknite;3=Llanowar Elves
+    > Roll a die numbered from 1 to N.
+
+!r me Pyknite LlanowarElves #Goblin Arsonist
+    > Randomly pick an item from a space-delimited list of choices.
 
 2   Libraries are inexhaustible.
 

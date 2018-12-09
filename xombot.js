@@ -1,4 +1,4 @@
-var XOMBOT_CHANNEL = '521208645363564545';
+var XOMBOT_CHANNEL = '369344620728942603';
 var README = '\nFull README at <https://mm.xom.io>';
 var BAD_COMMAND = 'Invalid command.';
 var NO_DIBS = "You can't do that because you don't have dibs on control.";
@@ -103,7 +103,6 @@ xombot.on('disconnect', function(errMsg, code) {
 });
 
 xombot.on('message', function(u, uid, cid, msg, evt) {
-  console.log(cid);//console.log(evt); // TODO remove after migrating to #paperclips
   retries = 0;
   var data = evt.d;
   if (data.channel_id !== XOMBOT_CHANNEL || data.content.slice(0, 1) !== '!' || data.author.bot) {
@@ -118,6 +117,7 @@ xombot.on('message', function(u, uid, cid, msg, evt) {
     case 'd': return dibs(data);
     case 't': return turnover(data);
     case 'g': return gameover(data);
+    case 'r': return roll(data);
     default: xombot.sendMessage({ to: data.channel_id, message: BAD_COMMAND });
   }
 });
@@ -454,6 +454,36 @@ function utopia(data) {
         message: 'OK, `' + state.g + x + (v && v.f ? ' [' + v.f + ']' : '') + ' := Utopia`'
       });
     });
+  });
+}
+
+function roll(data) {
+  var i = data.content.indexOf('#');
+  var s = data.content.slice(2, i === -1 ? undefined : i).split(' ');
+  var a = [];
+  var n = s.length;
+  var x;
+  for (i = 0; i < n; i++) {
+    x = s[i].trim();
+    if (x.length) {
+      a.push(x);
+    }
+  }
+  if (!a.length) {
+    xombot.sendMessage({ to: data.channel_id, message: '`!r` requires a number, or a space-delimited list of choices' });
+    return;
+  }
+  if (a.length === 1) {
+    x = parseInt(a[0]);
+    xombot.sendMessage({
+      to: data.channel_id,
+      message: x >= 1 ? (data.author.username + ' rolled ' + Math.floor(Math.random() * x + 1)) : 'Invalid number.'
+    });
+    return;
+  }
+  xombot.sendMessage({
+    to: data.channel_id,
+    message: data.author.username + ' randomed, out of ' + a.length + ' items: ' + a[Math.floor(Math.random() * a.length)]
   });
 }
 
