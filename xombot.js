@@ -102,7 +102,7 @@ xombot.on('disconnect', function(errMsg, code) {
 });
 
 xombot.on('message', function(u, uid, cid, msg, evt) {
-  //console.log(evt); // TODO remove after migrating to #paperclips
+  console.log(cid);//console.log(evt); // TODO remove after migrating to #paperclips
   retries = 0;
   var data = evt.d;
   if (data.channel_id !== '520947962197573644' || data.content.slice(0, 1) !== '!' || data.author.bot) {
@@ -194,7 +194,7 @@ function dibs(data) {
       f_team.set(team);
       xombot.sendMessage({
         to: data.author.id,
-        message: 'Welcome to game `' + state.g + '` P' + team + ' team. Your password for <http://mm.xom.io> is ' + myToken
+        message: 'Welcome to game `' + state.g + '` P' + team + ' team. Your password for <http://mm.xom.io> is `' + myToken + '`'
       });
     }
     if (team == (state.p ? 2 : 1)) {

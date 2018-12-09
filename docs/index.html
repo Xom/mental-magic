@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Xombot card tracker</title>
+<style>
+td { border: 1px solid rgb(221, 221, 221); padding: 4px; text-align: center }
+thead td { background-color: rgb(240, 240, 240) }
+td.secret { background-color: rgb(221, 255, 221) }
+td.small { font-size: small }
+</style>
+</head>
+<body>
+<form>
+Game ID:<input id="gameID" size="6"/>
+Password:<input id="password" size="18" autofocus/>
+<button id="buttonRefresh" type="submit" formaction="javascript:submit();" disabled>Refresh</button>
+</form>
+<div id="container"></div>
+
+<script src="https://www.gstatic.com/firebasejs/5.0.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.0.2/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.0.2/firebase-database.js"></script>
+
+<script>
+var firebaseConfig = {
+  apiKey: "AIzaSyCjcNANZBWOs_LRQHFpqv2OplwumQQFx20",
+  authDomain: "xombot-e72ae.firebaseapp.com",
+  databaseURL: "https://xombot-e72ae.firebaseio.com",
+  projectId: "xombot-e72ae"
+};
+firebase.initializeApp(firebaseConfig);
+
+var f_root = firebase.database().ref();
+
+var auth;
+var loggingIn = false;
+firebase.auth().onAuthStateChanged(function(newAuth) {
+  auth = newAuth;
+  if (auth) {
+    f_root.child('s/g').once('value', function(ds) {
+      document.getElementById('gameID').value = ds.val();
+      document.getElementById('buttonRefresh').disabled = false;
+    });
+  } else if (!loggingIn) {
+    loggingIn = true;
+    firebase.auth().signInAnonymously().catch(function(error) {
+      console.log(error.code);
+      console.log(error.message);
+    });
+  }
+});
+
+function submit() {
+  if (!auth) {
+    alert('Connection failed. Reload the page or tell Xom.');
+    return;
+  }
+  f_root.child('u').child(auth.uid).set(
+    document.getElementById('password').value,
+    function() {
+      var g = document.getElementById('gameID').value;
+      f_root.child('g').child(g).child('0').once('value', function(ds0) {
+        var v0 = ds0.val() || {};
+        f_root.child('g').child(g).child('3').once('value', function(ds) {
+          render(v0, ds.val() || {});
+        }, function onError3() {
+          f_root.child('g').child(g).child('2').once('value', function(ds) {
+            render(v0, ds.val() || {});
+          }, function onError2() {
+            f_root.child('g').child(g).child('1').once('value', function(ds) {
+              render(v0, ds.val() || {});
+            }, function onError1() {
+              render(v0, {});
+            });
+          });
+        });
+      });
+    }
+  );
+}
+
+var commaspace = /, /;
+function render(v, w) {
+  var table = document.createElement('table');
+  var tHead = table.createTHead();
+  var row = tHead.insertRow(0);
+  row.insertCell(0).innerText = 'id';
+  row.insertCell(1).innerText = 'cost';
+  row.insertCell(2).innerText = 'name';
+  row.insertCell(3).innerText = '!';
+  row.insertCell(4).innerText = '!!';
+  row.insertCell(5).innerText = '!n';
+  row.insertCell(6).innerText = '!';
+  row.insertCell(7).innerText = '!!';
+  row.insertCell(8).innerText = '!n';
+  row.insertCell(9).innerText = '!';
+  row.insertCell(10).innerText = '!!';
+  row.insertCell(11).innerText = '!n';
+  var tBody = document.createElement('tbody');
+  table.appendChild(tBody);
+  var a = [];
+  for (var cid in v) {
+    var x = v[cid];
+    x.w = w[cid];
+    a.push([cid, x]);
+  }
+  a.sort(function(p, q) {
+    if (p < q) return -1;
+    if (p > q) return 1;
+    return 0;
+  });
+  var n = a.length;
+  for (var i = 0; i < n; i++) {
+    row = tBody.insertRow(-1);
+    row.insertCell(0).innerText = a[i][0];
+    var y = a[i][1];
+    var cell
+    if (!y.f && y.w) {
+      cell = row.insertCell(1);
+      cell.innerText = y.w;
+      cell.className = 'secret';
+    } else {
+      row.insertCell(1).innerText = y.f || '';
+    }
+    row.insertCell(2).innerText = y.n || '';
+    cell = row.insertCell(3);
+    cell.innerText = y.pc || '';
+    cell.className = 'small';
+    cell = row.insertCell(4);
+    cell.innerText = y.fc || '';
+    cell.className = 'small';
+    cell = row.insertCell(5);
+    cell.innerText = y.nc || '';
+    cell.className = 'small';
+    cell = row.insertCell(6);
+    cell.innerText = y.pn || '';
+    cell.className = 'small';
+    cell = row.insertCell(7);
+    cell.innerText = y.fn || '';
+    cell.className = 'small';
+    cell = row.insertCell(8);
+    cell.innerText = y.nn || '';
+    cell.className = 'small';
+    cell = row.insertCell(9);
+    cell.innerText = y.pt ? new Date(y.pt).toLocaleString().replace(commaspace, ',\n') : '';
+    cell.className = 'small';
+    cell = row.insertCell(10);
+    cell.innerText = y.ft ? new Date(y.ft).toLocaleString().replace(commaspace, ',\n') : '';
+    cell.className = 'small';
+    cell = row.insertCell(11);
+    cell.innerText = y.nt ? new Date(y.nt).toLocaleString().replace(commaspace, ',\n') : '';
+    cell.className = 'small';
+  }
+  var container = document.getElementById('container');
+  var prev = container.firstChild;
+  container.appendChild(table);
+  if (prev) {
+    container.removeChild(prev);
+  }
+}
+</script>
+
+</body>
+</html>
+

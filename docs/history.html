@@ -3,6 +3,11 @@
 <head>
 <meta charset="utf-8">
 <title>Xombot cardnames history</title>
+<style>
+table { margin: 1em }
+td { border: 1px solid rgb(221, 221, 221); padding: 4px }
+thead td { background-color: rgb(240, 240, 240) }
+</style>
 </head>
 <body>
 
@@ -21,11 +26,26 @@ var firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
+var loggingIn = false;
 var fetching = false;
 firebase.auth().onAuthStateChanged(function(auth) {
-  if (auth && !fetching) {
+  if (!auth) {
+    if (!loggingIn) {
+      loggingIn = true;
+      firebase.auth().signInAnonymously().catch(function(error) {
+        console.log(error.code);
+        console.log(error.message);
+      });
+    }
+    return;
+  }
+  if (!fetching) {
     fetching = true;
     firebase.database().ref().child('n').once('value', function(ds) {
+      firebase.auth().signOut().catch(function(error) {
+        console.log(error.code);
+        console.log(error.message);
+      });
       var v = ds.val() || {};
       var table = document.createElement('table');
       var tHead = table.createTHead();
