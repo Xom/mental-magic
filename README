@@ -1,4 +1,4 @@
-Async Mental Magic v20181208a
+Async Mental Magic v20181208b
 
 1   For the sake of play-by-post, cards have IDs that are public
     information, even when the cards are in players' hands. IDs are like
@@ -6,7 +6,7 @@ Async Mental Magic v20181208a
     and '00' identifies the individual card. Bot commands are as follows:
 
 ! 100 101 102 103 104 105 106 #comment goes here
-    > PEEP one or more cards, i.e. make them visible to your team
+    > PULL one or more new cards, which will become visible to your team
 
 !! 202 203 204 #Gitaxian Probe
     > FLIP one or more cards, i.e. reveal publicly
@@ -156,7 +156,9 @@ Async Mental Magic v20181208a
   7e  Once control is turned over, the non-active player controls her
       decisions and can name cards, but still can't gain priority.
 
-  7f  Ignore Rules 7 and 8 when a "Mindslaver" effect is active.
+  7f  There's no way to make any decisions before the first turn.
+
+  7g  Ignore Rules 7 and 8 when a "Mindslaver" effect is active.
 
 8   As for uncontrolled decisions, their options are partitioned into the
     following categories: NO_ACTION, SELF, OPPONENT, OTHER, and MYRIAD.

@@ -14,9 +14,10 @@
 
     "g": {
       "$gid": {
+        "0": { ".read": true },
         "1": { ".read": "data.parent().child('t').child(root.child('u').child(auth.uid).val()).val() == 1" },
         "2": { ".read": "data.parent().child('t').child(root.child('u').child(auth.uid).val()).val() == 2" },
-        "3": { ".read": true },
+        "3": { ".read": "$gid !== root.child('s/g').val()" },
       }
     }
   }
