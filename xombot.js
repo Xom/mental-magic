@@ -41,6 +41,12 @@ var cards = [];
 }());
 function card() { return cards[Math.floor(Math.random() * 600)]; }
 
+var BASIC = { 'utopia': true, 'plains': true, 'island': true, 'swamp': true, 'mountain': true, 'forest': true };
+var btb = /[^a-zA-Z]/g;
+function alphalower(s) {
+  return s.replace(btb, '').toLowerCase();
+}
+
 var firebase = require('firebase-admin');
 var adminAccount = require('./XOMBOT_FIREBASE_SECRET.json');
 firebase.initializeApp({
@@ -105,8 +111,8 @@ xombot.on('message', function(u, uid, cid, msg, evt) {
   switch(data.content.slice(1, 2)) {
     case ' ': return pull(data);
     case '!': return flip(data);
-    case 'n': return;
-    case 'u': return;
+    case 'n': return name(data);
+    case 'u': return utopia(data);
     case 'i': return info(data);
     case 'd': return dibs(data);
     case 't': return turnover(data);
@@ -325,6 +331,126 @@ function flip(data) {
         fg(state.g).child('3').update(uuu, function() {
           xombot.sendMessage({ to: data.channel_id, message: message });
         });
+      });
+    });
+  });
+}
+
+function name(data) {
+  if (!state.d || state.d.id !== data.author.id) {
+    xombot.sendMessage({ to: data.channel_id, message: NO_DIBS });
+    return;
+  }
+  var i = data.content.indexOf('#');
+  var s = data.content.slice(2, i === -1 ? undefined : i).trim();
+  var j = s.indexOf(' ');
+  var x = parseInt(s.slice(0, j));
+  if (x >= 0 && x <= 999) {
+    if (x < 100) {
+      x += state.p ? 200 : 100;
+    }
+  } else {
+    xombot.sendMessage({ to: data.channel_id, message: 'Invalid number.' });
+    return;
+  }
+  var cardname = s.slice(j).trim();
+  if (!cardname.length) {
+    xombot.sendMessage({ to: data.channel_id, message: 'Invalid cardname.' });
+    return;
+  }
+  var cardlower = alphalower(cardname);
+  var comment = i === -1 ? null : data.content.slice(i);
+  getVal(fg(state.g).child('0').child(x), function(v) {
+    if (v && v.n) {
+      xombot.sendMessage({
+        to: data.channel_id,
+        message: '`' + state.g + x + '` was already named `' + v.n + '`'
+      });
+      return;
+    }
+    getVal(fn(cardlower), function(obj) {
+      if (obj && !(comment && comment.startsWith('#force'))) {
+        var message = 'Similar cardnames found in history. To override, begin comment with `#force`\n```';
+        for (var cid in obj) {
+          message += '\n' + cid + ': ' + obj[cid];
+        }
+        message += '```';
+        xombot.sendMessage({ to: data.channel_id, message: message });
+        return;
+      }
+      getVal(fg(state.g).child('3').child(x), function(w) {
+        var u = {
+          nt: new Date(data.timestamp).getTime(),
+          nu: data.author.id,
+          nn: data.author.username,
+          nc: comment,
+          n: cardname
+        };
+        if (!w) {
+          fg(state.g).child('0').child(x).set(u, function() {
+            xombot.sendMessage({
+              to: data.channel_id,
+              message: 'OK, `' + state.g + x + ' := ' + cardname + '`, though no mana cost was ever generated for it.'
+            });
+            if (!BASIC[cardlower]) {
+              fn(cardlower).child(state.g + x).set(cardname);
+            }
+          });
+          return;
+        }
+        if (!v.f && cardlower !== 'utopia') {
+          u.fc = '#!n';
+          u.f = w;
+        }
+        fg(state.g).child('0').child(x).update(u, function() {
+          xombot.sendMessage({
+            to: data.channel_id,
+            message: 'OK, `' + state.g + x + (cardlower === utopia && !v.f ? '' : ' [' + w + ']') + ' := ' + cardname + '`'
+          });
+          if (!BASIC[cardlower]) {
+            fn(cardlower).child(state.g + x).set(cardname);
+          }
+        });
+      });
+    });
+  });
+}
+
+function utopia(data) {
+  if (!state.d || state.d.id !== data.author.id) {
+    xombot.sendMessage({ to: data.channel_id, message: NO_DIBS });
+    return;
+  }
+  var i = data.content.indexOf('#');
+  var x = parseInt(data.content.slice(2, i === -1 ? undefined : i).trim());
+  if (x >= 0 && x <= 999) {
+    if (x < 100) {
+      x += state.p ? 200 : 100;
+    }
+  } else {
+    xombot.sendMessage({ to: data.channel_id, message: 'Invalid number.' });
+    return;
+  }
+  var comment = i === -1 ? null : data.content.slice(i);
+  getVal(fg(state.g).child('0').child(x), function(v) {
+    if (v && v.n) {
+      xombot.sendMessage({
+        to: data.channel_id,
+        message: '`' + state.g + x + '` was already named `' + v.n + '`'
+      });
+      return;
+    }
+    var u = {
+      nt: new Date(data.timestamp).getTime(),
+      nu: data.author.id,
+      nn: data.author.username,
+      nc: comment,
+      n: 'Utopia'
+    };
+    fg(state.g).child('0').child(x).update(u, function() {
+      xombot.sendMessage({
+        to: data.channel_id,
+        message: 'OK, `' + state.g + x + (v && v.f ? ' [' + v.f + ']' : '') + ' := Utopia`'
       });
     });
   });
