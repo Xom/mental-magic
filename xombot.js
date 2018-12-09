@@ -1,4 +1,5 @@
-var README = '\nFull README at <http://mm.xom.io>';
+var XOMBOT_CHANNEL = '521208645363564545';
+var README = '\nFull README at <https://mm.xom.io>';
 var BAD_COMMAND = 'Invalid command.';
 var NO_DIBS = "You can't do that because you don't have dibs on control.";
 
@@ -105,7 +106,7 @@ xombot.on('message', function(u, uid, cid, msg, evt) {
   console.log(cid);//console.log(evt); // TODO remove after migrating to #paperclips
   retries = 0;
   var data = evt.d;
-  if (data.channel_id !== '520947962197573644' || data.content.slice(0, 1) !== '!' || data.author.bot) {
+  if (data.channel_id !== XOMBOT_CHANNEL || data.content.slice(0, 1) !== '!' || data.author.bot) {
     return;
   }
   switch(data.content.slice(1, 2)) {
@@ -194,7 +195,7 @@ function dibs(data) {
       f_team.set(team);
       xombot.sendMessage({
         to: data.author.id,
-        message: 'Welcome to game `' + state.g + '` P' + team + ' team. Your password for <http://mm.xom.io> is `' + myToken + '`'
+        message: 'Welcome to game `' + state.g + '` P' + team + ' team. Your password for <https://mm.xom.io> is `' + myToken + '`'
       });
     }
     if (team == (state.p ? 2 : 1)) {
