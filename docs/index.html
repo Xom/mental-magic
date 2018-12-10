@@ -4,20 +4,27 @@
 <meta charset="utf-8">
 <title>Xombot card tracker</title>
 <style>
-td { border: 1px solid rgb(221, 221, 221); padding: 2px; text-align: center }
-thead td { background-color: rgb(240, 240, 240) }
+body { margin: 0; padding: 0 }
+body, input { text-align: center }
+#world { position: absolute; top: 0; right: 0; bottom: 0; left: 0; flex-flow: column }
+#world, header, section { display: flex; justify-content: center }
+header { flex: 0 1 auto }
+section { flex: 1 1 auto; overflow: scroll }
+header, td { border: 1px solid rgb(221, 221, 221); padding: 2px }
+header, thead td { background-color: rgb(240, 240, 240) }
 td.secret { background-color: rgb(221, 255, 221) }
 td.small { font-size: small }
+pre { width: 80ch; text-align: left }
 </style>
 </head>
-<body>
-<form>
+<body><div id="world">
+<header><form>
 Game ID:<input id="gameID" size="6"/>
 Password:<input id="password" size="18" autofocus/>
 <button id="buttonRefresh" type="submit" formaction="javascript:submit();" disabled>Refresh</button>
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="history.html">Xombot cardnames history</a>
-</form>
-<div id="container"><pre>Async Mental Magic v20181209a
+</form></header>
+<section id="container"><pre>Async Mental Magic v20181209a
 
 1   For the sake of play-by-post, cards have IDs that are public
     information, even when the cards are in players' hands. IDs are like
@@ -213,7 +220,8 @@ Password:<input id="password" size="18" autofocus/>
       control, may specify directions in unlimited detail for ordering
       blockers and assigning combat damage.
 
-  8g  Specifications and directions are public information.</pre></div>
+  8g  Specifications and directions are public information.</pre></section>
+</div>
 
 <script src="https://www.gstatic.com/firebasejs/5.0.2/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/5.0.2/firebase-auth.js"></script>
