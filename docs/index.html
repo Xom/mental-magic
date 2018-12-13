@@ -349,13 +349,13 @@ function render(v, w) {
     cell.innerText = y.nn || '';
     cell.className = 'small';
     cell = row.insertCell(9);
-    cell.innerText = y.pt ? new Date(y.pt).toLocaleString().replace(commaspace, ',\n') : '';
+    cell.innerText = getDateString(y.pt);
     cell.className = 'small';
     cell = row.insertCell(10);
-    cell.innerText = y.ft ? new Date(y.ft).toLocaleString().replace(commaspace, ',\n') : '';
+    cell.innerText = getDateString(y.ft);
     cell.className = 'small';
     cell = row.insertCell(11);
-    cell.innerText = y.nt ? new Date(y.nt).toLocaleString().replace(commaspace, ',\n') : '';
+    cell.innerText = getDateString(y.nt);
     cell.className = 'small';
   }
   var container = document.getElementById('container');
@@ -364,6 +364,23 @@ function render(v, w) {
   if (prev) {
     container.removeChild(prev);
   }
+}
+
+function getDateString(ts) {
+  if (!ts) {
+    return '';
+  }
+  var t = new Date(ts);
+  var m = t.getUTCMonth() + 1;
+  var d = t.getUTCDate();
+  var h = t.getUTCHours();
+  var x = t.getUTCMinutes();
+  var s = t.getUTCSeconds();
+  return (m > 9 ? '' : '0') + m +
+         (d > 9 ? '' : '0') + d +
+         (h > 9 ? '' : '0') + h +
+         (x > 9 ? '' : '0') + x +
+         (s > 9 ? '' : '0') + s;
 }
 </script>
 
