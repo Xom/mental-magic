@@ -4,28 +4,24 @@
 <meta charset="utf-8">
 <title>Xombot card tracker</title>
 <style>
-body { margin: 0; padding: 0 }
-body, input { text-align: center }
-#world { position: absolute; top: 0; right: 0; bottom: 0; left: 0; flex-flow: column }
-#world, header, section { display: flex; justify-content: center }
-header { flex: 0 1 3em; position: relative }
-form { position: absolute; right: 0; bottom: 2px; left: 0 }
-section { flex: 1 1 auto; overflow: scroll }
-header, td { border: 1px solid rgb(221, 221, 221); padding: 2px }
-header, thead td { background-color: rgb(240, 240, 240) }
+#buttonRefresh { position: fixed; top: 4px; right: 4px; width: 160px; height: 40px }
+form { text-align: right; padding-right: 175px }
+td, input { text-align: center }
+td { border: 1px solid rgb(221, 221, 221); padding: 2px }
+thead td { background-color: rgb(240, 240, 240) }
 td.secret { background-color: rgb(221, 255, 221) }
 td.small { font-size: small }
-pre { width: 80ch; text-align: left }
+pre { text-align: left; padding: 1em }
 </style>
 </head>
-<body><div id="world">
+<body>
 <header><form>
-Game ID:<input id="gameID" size="6"/>
-Password:<input id="password" size="18" autofocus/>
+<a href="history.html">Xombot cardnames history</a>&nbsp;&nbsp;&nbsp;&nbsp;
+Game ID:&nbsp;<input id="gameID" size="6"/>
+Password:&nbsp;<input id="password" size="18" autofocus/>
 <button id="buttonRefresh" type="submit" formaction="javascript:submit();" disabled>Refresh</button>
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="history.html">Xombot cardnames history</a>
 </form></header>
-<section id="container"><pre>Async Mental Magic v20181209a
+<section id="container"><pre>Async Mental Magic v20181214a
 
 1   For the sake of play-by-post, cards have IDs that are public
     information, even when the cards are in players' hands. IDs are like
@@ -75,14 +71,19 @@ Password:<input id="password" size="18" autofocus/>
       Sideboards contain inexhaustible supplies of Plains, Island, Swamp,
       Mountain, Forest, and nothing else.
 
-  2d  ID'd cards in libraries cease to exist when state-based effects happen.
+  2d  ID'd cards in libraries cease to exist when state-based effects happen,
+      UNLESS they're being referenced by a continuous effect that references
+      a specific number of cards (e.g. not "Cards in your library are red").
       (Opt works as expected. The cards returned by Brainstorm and Time Ebb
-      are lost.)
+      are lost. Sphinx of Jwar Isle works as expected (and even prevents one
+      of the cards returned by Brainstorm from being lost). Orcish Spy
+      doesn't work (unless your opponent has Sphinx of Jwar Isle).)
 
   2e  Cards in graveyards cease to exist when state-based effects happen
-      UNLESS they're being referenced by something on the stack OR
-      a delayed triggered ability. (Kitchen Finks and Loyal Cathar both
-      work as expected. But you can't cast Zombify in time for it to work.)
+      UNLESS they're being referenced by a continuous effect, an object on
+      the stack, or a delayed triggered ability, that references a specific
+      number of cards. (Kitchen Finks and Loyal Cathar both work as expected.
+      But you can't cast Zombify in time for it to work.)
 
   2f  Cards in exile cease to exist when state-based effects happen UNLESS
       they're being referenced by ANYTHING, even themselves (e.g. Suspend).
@@ -191,14 +192,16 @@ Password:<input id="password" size="18" autofocus/>
 
   7f  There's no way to make any decisions before the first turn.
 
-  7g  Ignore Rules 7 and 8 when a "Mindslaver" effect is active.
+  7g  When a "Mindslaver" effect is active, the controlling player plays
+      for the controlled player within the framework of Rules 7 and 8.
 
 8   As for uncontrolled decisions, their options are partitioned into the
     following categories: NO_ACTION, SELF, OPPONENT, OTHER, and MYRIAD.
 
   8a  NO_ACTION is any choice that would qualify as taking no action for
       the ordinary Magic rules purposes of determining whether a player
-      would be obligated to break an infinite loop.
+      would be obligated to break an infinite loop. Moreover, when naming
+      a card, if not doing so is an option, then not doing so is NO_ACTION.
 
   8b  SELF and OPPONENT are choices of one player or one or more of their
       objects over the other(s).
@@ -208,7 +211,9 @@ Password:<input id="password" size="18" autofocus/>
       are MYRIAD.
 
   8d  Uncontrolled decisions default to NO_ACTION if possible, else random
-      from non-MYRIAD options, else choose the smallest number allowed,
+      from non-MYRIAD options, else enumerate and random from all MYRIAD
+      options if finite and feasible (possibly pausing the game to debate
+      feasibility), else if choosing a number choose the smallest option,
       else pause the game and debate further rules.
 
   8e  The defaults in 8d can be overridden by specifying which category or
@@ -222,7 +227,6 @@ Password:<input id="password" size="18" autofocus/>
       blockers and assigning combat damage.
 
   8g  Specifications and directions are public information.</pre></section>
-</div>
 
 <script src="https://www.gstatic.com/firebasejs/5.0.2/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/5.0.2/firebase-auth.js"></script>
