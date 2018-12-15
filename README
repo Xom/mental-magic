@@ -1,4 +1,4 @@
-Async Mental Magic v20181214a
+Async Mental Magic v20181215a
 
 1   For the sake of play-by-post, cards have IDs that are public
     information, even when the cards are in players' hands. IDs are like
@@ -23,9 +23,10 @@ Async Mental Magic v20181214a
 !dibs
     > Call dibs on controlling the current turn.
 
-!turnover #kill 4/4 if possible, else prioritize 1/1s
-    > End control of your turn,
-      with directions for assigning combat damage, if needed.
+!turnover
+    > End control of your turn. Before you do, remember to specify orders
+      for assigning damage to blockers and set categories for uncontrolled
+      decisions, then peek at the top card of your library. (See Rules 7+)
 
 !gameover
     > End the current game. All cards will FLIP.
@@ -49,29 +50,20 @@ Async Mental Magic v20181214a
       Mountain, Forest, and nothing else.
 
   2d  ID'd cards in libraries cease to exist when state-based effects happen,
-      UNLESS they're being referenced by a continuous effect that references
-      a specific number of cards (e.g. not "Cards in your library are red").
-      (Opt works as expected. The cards returned by Brainstorm and Time Ebb
-      are lost. Sphinx of Jwar Isle works as expected (and even prevents one
-      of the cards returned by Brainstorm from being lost). Orcish Spy
-      doesn't work (unless your opponent has Sphinx of Jwar Isle).)
+      EXCEPT cards on top of libraries.
 
   2e  Cards in graveyards cease to exist when state-based effects happen
-      UNLESS they're being referenced by a continuous effect, an object on
-      the stack, or a delayed triggered ability, that references a specific
-      number of cards. (Kitchen Finks and Loyal Cathar both work as expected.
-      But you can't cast Zombify in time for it to work.)
+      UNLESS they're being referenced by something on the stack OR
+      a delayed triggered ability. (Kitchen Finks and Loyal Cathar both
+      work as expected. But you can't cast Zombify in time for it to work.)
 
   2f  Cards in exile cease to exist when state-based effects happen UNLESS
       they're being referenced by ANYTHING, even themselves (e.g. Suspend).
 
 3   Cards start unnamed, and have mana cost and color, but no other
-    characteristics.
+    characteristics. (They have no types; they can be discarded by Duress.)
 
-  3a  Furthermore, unnamed cards do not match any description involving
-      card type. E.g. they can't be chosen for Ostracize or Distress.
-
-  3b  When a card becomes named, the name lasts for the rest of the game.
+  3a  When a card becomes named, the name lasts for the rest of the game.
 
 4   Once per turn, the active player may name and play an unnamed card as:
 
@@ -84,19 +76,19 @@ Async Mental Magic v20181214a
   4a  Doing so counts as playing a land, but effects that allow you to
       play additional land in a turn don't let you name Utopia again.
 
-5   While you have control, you may name an unnamed card you own if one of
+5   You may name an unnamed card you own if you have control and one of
     the following conditions would be fulfilled after you do so:
-     * it would enter face-up onto the stack or the battlefield;
+     * it would enter the stack or the battlefield;
      * it would be spliced onto a spell you're casting;
      * an ability it has would go onto the stack, or a delayed triggered
        ability it has would go onto the stack later;
      * or it would be exiled by an effect that couldn't exile it if it
        stayed unnamed, and which would continue to reference it.
-    For example, you name a card when Isochron Scepter exiles it.
+    (For example, you name a card when Isochron Scepter exiles it.
     On the other hand, you don't name a card when Elkin Bottle exiles it;
     you name it if and when you play it. And you can't name Transguild
     Courier to pay for Force of Will, but you can use an unnamed card
-    that's already blue (or a Transguild Courier that got bounced).
+    that's already blue, or a Transguild Courier that got bounced.)
 
   5a  Some effects exile cards regardless of characteristics, but only
       continue to reference the cards matching some description. For the
@@ -106,7 +98,7 @@ Async Mental Magic v20181214a
       sorcery card when you want to cast it.
 
   5b  You may name an unnamed card an opponent owns if an effect you
-      control would put that card face-up onto the stack or the battlefield
+      control would put that card onto the stack or the battlefield
       under your control, possibly by letting you cast it. This rule trumps
       any rules letting the opponent choose the name.
 
@@ -120,6 +112,7 @@ Async Mental Magic v20181214a
   5e  A multicolor card costing at least one non-hybrid colored mana may
       become any multicolor card costing at least one non-hybrid colored
       mana that has the same converted mana cost.
+      (The deck we're currently using has no such cards.)
 
   5f  A card may become any card costing hybrid mana if their mana costs
       would match with some or all of the hybrid mana symbols treated as
@@ -194,9 +187,10 @@ Async Mental Magic v20181214a
       else pause the game and debate further rules.
 
   8e  The defaults in 8d can be overridden by specifying which category or
-      categories you want which ability to random from, on a per-ability
-      basis. Your spec can't apply only to some circumstances, and you
-      can't rank the categories, only select one set to try before default.
+      set of categories you want which ability to random from, on a
+      per-ability basis (as opposed to a per-ability-instance basis).
+      Your spec can't apply only to some circumstances, and you can't
+      rank the categories, only select a set to try before default.
       Specs are assumed to be until end of game unless otherwise specified.
 
   8f  As an exception to the above, the active player, before turning over
@@ -204,4 +198,13 @@ Async Mental Magic v20181214a
       blockers and assigning combat damage.
 
   8g  Specifications and directions are public information.
+
+9   After stating specifications and directions and before doing !turnover,
+    you may peek at the top card of your library. (It's worth improving the
+    gameflow by letting you see your next card, even though you can exploit
+    it instead of drawing it.)
+
+  9a  You can add yourself to a team by calling !dibs during one of that
+      team's turns even if you aren't going to be playing that particular
+      turn. (Call !dibs twice to cancel existing dibs.)
 
