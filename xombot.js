@@ -355,11 +355,11 @@ function name(data) {
     return;
   }
   var cardname = s.slice(j).trim();
-  if (!cardname.length) {
+  var cardlower = alphalower(cardname);
+  if (!cardlower.length) {
     xombot.sendMessage({ to: data.channel_id, message: 'Invalid cardname.' });
     return;
   }
-  var cardlower = alphalower(cardname);
   var comment = i === -1 ? null : data.content.slice(i);
   getVal(fg(state.g).child('0').child(x), function(v) {
     if (v && v.n) {
